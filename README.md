@@ -25,6 +25,7 @@
             |                  |    |              |    |                  |
             |  Copilot CLI     +--->+              +--->+    MariaDB       |
             |                  |    |              |    |                  |
+            |                  |    |              +--->+    Redis         |
             |                  |    |              |    |                  |
             +------------------+    +--------------+    +------------------+
                  MCP Clients           MCP Server             Databases
@@ -47,6 +48,7 @@ PostgreSQL, MySQL, SQL Server, MariaDB, SQLite, and Redis.
 DBHub implements MCP tools for database operations:
 
 - **[execute_sql](https://dbhub.ai/tools/execute-sql)**: Execute SQL queries with transaction support and safety controls
+- **execute_redis**: Execute Redis commands for Redis sources. In multi-source mode, Redis tools are exposed as `execute_redis_{source_id}`. Configure it in `dbhub.toml` with the built-in `name = "execute_sql"` for backward compatibility.
 - **[search_objects](https://dbhub.ai/tools/search-objects)**: Search and explore database schemas, tables, columns, indexes, and procedures with progressive disclosure
 - **[Custom Tools](https://dbhub.ai/tools/custom-tools)**: Define reusable, parameterized SQL operations in your `dbhub.toml` configuration file
 
