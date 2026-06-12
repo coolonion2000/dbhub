@@ -52,6 +52,40 @@ DBHub implements MCP tools for database operations:
 - **[search_objects](https://dbhub.ai/tools/search-objects)**: Search and explore database schemas, tables, columns, indexes, and procedures with progressive disclosure
 - **[Custom Tools](https://dbhub.ai/tools/custom-tools)**: Define reusable, parameterized SQL operations in your `dbhub.toml` configuration file
 
+### Redis Support
+
+DBHub supports Redis as a first-class data source, including single-node, Cluster, and Sentinel deployments.
+
+Redis-specific behavior:
+
+- Redis command execution is exposed as `execute_redis` for a single Redis source, or `execute_redis_{source_id}` in multi-source mode.
+- Redis key browsing uses the existing `search_objects` tool, or `search_objects_{source_id}` in multi-source mode.
+- The Redis execute tool accepts a `command` argument. The legacy `sql` argument is still accepted for compatibility.
+- In `dbhub.toml`, keep configuring the built-in execute tool as `name = "execute_sql"`; DBHub exposes it as `execute_redis` automatically for Redis sources.
+
+Example Redis source:
+
+```toml
+[[sources]]
+id = "cache"
+type = "redis"
+host = "localhost"
+port = 6379
+database = "0"
+password = "${REDIS_PASSWORD}"
+
+[[tools]]
+name = "execute_sql"
+source = "cache"
+readonly = true
+
+[[tools]]
+name = "search_objects"
+source = "cache"
+```
+
+For Redis Cluster, set `mode = "cluster"` and provide `nodes = ["host1:6379", "host2:6379"]`. For Sentinel, set `mode = "sentinel"`, provide `sentinels = ["host1:26379", "host2:26379"]`, and set `sentinel_master`.
+
 ## Workbench
 
 DBHub includes a [built-in web interface](https://dbhub.ai/workbench/overview) for interacting with your database tools. It provides a visual way to execute queries, run custom tools, and view request traces without requiring an MCP client.
